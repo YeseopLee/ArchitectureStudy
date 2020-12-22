@@ -10,10 +10,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.architecture.R
 import com.example.architecture.data.model.RepoSearchResponse
+import com.example.architecture.ui.MainActivity
 
 
 class SearchAdapter(val context: Context, val searchArray: ArrayList<RepoSearchResponse.RepoItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
+    //클릭 인터페이스 정의
+    interface ItemClickListener {
+        fun onClick(view: View, position: Int)
+    }
+
+    //클릭리스너 선언
+    private lateinit var itemClickListner: ItemClickListener
+
+    //클릭리스너 등록 매소드
+    fun setItemClickListener(itemClickListener: ItemClickListener) {
+        this.itemClickListner = itemClickListener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -47,6 +60,10 @@ class SearchAdapter(val context: Context, val searchArray: ArrayList<RepoSearchR
 
         Glide.with(view).load(searchArray[position].owner.avatar_url).into(iv_profile)
 
+        //view에 onClickListner를 달고, 그 안에서 직접 만든 itemClickListener를 연결시킨다
+        holder.itemView.setOnClickListener {
+            itemClickListner.onClick(it, position)
+        }
 
     }
 

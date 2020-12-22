@@ -1,26 +1,19 @@
 package com.example.architecture.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.architecture.R
-import com.example.architecture.data.model.RepoSearchResponse
-import com.example.architecture.ui.adapter.SearchAdapter
+import com.example.architecture.data.model.RepoGetResponse
+import com.example.architecture.data.model.UserGetResponse
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import retrofit2.Call
@@ -31,25 +24,38 @@ class DetailFragment : Fragment() {
 
     private var service: ServiceApi? = null
 
-    private var searchArray: ArrayList<RepoSearchResponse.RepoItem> = arrayListOf()
-    private lateinit var searchAdapter: SearchAdapter
+    private lateinit var mParam1: String
+    private lateinit var mParam2: String
 
-    private lateinit var searchQuery: String
+    private var repoDTO: ArrayList<RepoGetResponse> = arrayListOf()
+    private var userDTO: ArrayList<UserGetResponse> = arrayListOf()
 
-    private lateinit var recyclerView : RecyclerView
-    private lateinit var loadingLayout : ConstraintLayout
+    private lateinit var iv_profile: ImageView
+    private lateinit var tv_fullname: TextView
+    private lateinit var tv_watch: TextView
+    private lateinit var tv_star: TextView
+    private lateinit var tv_fork: TextView
+    private lateinit var tv_follower: TextView
+    private lateinit var tv_following: TextView
+    private lateinit var tv_owner: TextView
+    private lateinit var tv_language: TextView
+    private lateinit var loadingLayout: ConstraintLayout
 
-    private lateinit var btn_search : Button
-    private lateinit var et_search : EditText
-    private lateinit var tv_totalCount : TextView
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (arguments != null) {
+            mParam1 = arguments!!.getString("owner").toString()
+            mParam2 = arguments!!.getString("name").toString()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+
+        return inflater.inflate(R.layout.fragment_detail, container, false)
 
     }
 
@@ -58,78 +64,94 @@ class DetailFragment : Fragment() {
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
-        recyclerView = view.findViewById(R.id.search_recyclerview)
-        loadingLayout = view.findViewById(R.id.search_layout_loading)
-        btn_search = view.findViewById(R.id.search_button_search)
-        et_search = view.findViewById(R.id.search_edittext_search)
-        tv_totalCount = view.findViewById(R.id.search_textview_totalCount)
+        iv_profile = view.findViewById(R.id.detail_imageview_profile)
+        tv_fullname = view.findViewById(R.id.detail_textview_fullname)
+        tv_watch = view.findViewById(R.id.detail_textview_watch)
+        tv_fork = view.findViewById(R.id.detail_textview_fork)
+        tv_star = view.findViewById(R.id.detail_textview_star)
+        tv_follower = view.findViewById(R.id.detail_textview_follower)
+        tv_following = view.findViewById(R.id.detail_textview_following)
+        tv_language = view.findViewById(R.id.detail_textview_language)
+        tv_owner = view.findViewById(R.id.detail_textview_owner)
+        loadingLayout = view.findViewById(R.id.detail_layout_loading)
 
-        initListner()
-        initAdapter()
+        Log.e("owner",mParam1)
+        Log.e("name",mParam2)
 
-    }
-
-    private fun initListner(){
-
-        btn_search.setOnClickListener {
-            attemptSearch()
-        }
-    }
-
-    private fun initAdapter(){
-
-        searchAdapter = SearchAdapter(activity!!,searchArray)
-        val lm = LinearLayoutManager(activity!!)
-        recyclerView.layoutManager = lm
-        recyclerView.adapter = searchAdapter
+        getRepo(mParam1,mParam2)
+        getUser(mParam1)
 
     }
 
-    // 검색 유효성 검사
-    private fun attemptSearch(){
-        et_search.error = null
-        searchQuery = et_search.text.toString()
-        var cancel = false
-        var focusView: View? = null
-
-        if(searchQuery.isEmpty()){ // 검색어가 공백일 경우
-            et_search.error = "검색어를 입력하세요."
-            focusView = et_search
-            cancel = true
-        }
-
-        if(cancel){
-            focusView?.requestFocus()
-        } else {
-            getSearch(searchQuery)
-        }
-    }
-
-    private fun getSearch(query: String){
+    private fun getRepo(owner: String, name: String){
         showProgress(true)
-        service?.searchRepo(query)?.enqueue(object: Callback<RepoSearchResponse?> {
-            @SuppressLint("SetTextI18n")
+        service?.getRepo(owner, name)?.enqueue(object : Callback<RepoGetResponse?> {
             override fun onResponse(
-                call: Call<RepoSearchResponse?>,
-                response: Response<RepoSearchResponse?>
-            ){
-                if(response.isSuccessful){
+                call: Call<RepoGetResponse?>,
+                response: Response<RepoGetResponse?>
+            ) {
+                if (response.isSuccessful) {
                     showProgress(false)
                     val result = response.body()!!
-                    tv_totalCount.text = result.total_count.toString()+"개의 검색 결과가 있습니다."
+                    repoDTO.add(
+                        RepoGetResponse(
+                            result.full_name,
+                            result.watchers_count,
+                            result.stargazers_count,
+                            result.forks_count,
+                            result.language
+                        )
+                    )
 
-                    searchArray.clear()
-                    Log.e("size",result.items.size.toString())
-                    for (i in 0 until result.items.size){
-                        searchArray.add(RepoSearchResponse.RepoItem(result.items[i].archive_url,result.items[i].full_name,result.items[i].private,result.items[i].owner))
-                    }
+                    tv_fullname.text = result.full_name
+                    tv_watch.text = result.watchers_count.toString()
+                    tv_fork.text = result.forks_count.toString()
+                    tv_star.text = result.stargazers_count.toString()
+                    tv_language.text = result.language
 
-                    searchAdapter.notifyDataSetChanged()
                 } else { //통신에러
                     showProgress(false)
                 }
             }
-            override fun onFailure(call: Call<RepoSearchResponse?>?, t: Throwable){
+
+            override fun onFailure(call: Call<RepoGetResponse?>?, t: Throwable) {
+                //통신에러
+                showProgress(false)
+            }
+        })
+    }
+
+    private fun getUser(owner: String){
+        showProgress(true)
+        service?.getUser(owner)?.enqueue(object : Callback<UserGetResponse?> {
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(
+                call: Call<UserGetResponse?>,
+                response: Response<UserGetResponse?>
+            ) {
+                if (response.isSuccessful) {
+                    showProgress(false)
+                    val result = response.body()!!
+                    userDTO.add(
+                        UserGetResponse(
+                            result.login,
+                            result.avatar_url,
+                            result.blog,
+                            result.followers,
+                            result.following
+                        )
+                    )
+                    tv_owner.text = result.login
+                    tv_follower.text = "follower: "+result.followers.toString()
+                    tv_following.text = "following: "+result.following.toString()
+                    Glide.with(view!!).load(result.avatar_url).into(iv_profile)
+
+                } else { //통신에러
+                    showProgress(false)
+                }
+            }
+
+            override fun onFailure(call: Call<UserGetResponse?>?, t: Throwable) {
                 //통신에러
                 showProgress(false)
             }
@@ -139,6 +161,5 @@ class DetailFragment : Fragment() {
     private fun showProgress(show: Boolean){
         loadingLayout.visibility = (if (show) View.VISIBLE else View.GONE)
     }
-
 
 }

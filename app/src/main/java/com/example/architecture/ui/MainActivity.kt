@@ -19,16 +19,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_framelayout, SearchFragment())
-            .commit()
+        replaceFragment(SearchFragment(),null,null)
 
     }
 
-    fun replaceFragment(fragment: Fragment?) {
-        val fragmentManager: FragmentManager = supportFragmentManager
-        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.main_framelayout, fragment!!)
+    fun replaceFragment(fragment: Fragment?, owner: String?, name: String?) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_framelayout, fragment!!.apply {
+                arguments = Bundle().apply {
+                    putString("owner",owner)
+                    putString("name",name)
+                }
+            })
             .commit()
     }
 

@@ -1,25 +1,22 @@
 package com.example.architecture.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.architecture.R
+import com.example.architecture.data.model.RepoGetResponse
 import com.example.architecture.data.model.RepoSearchResponse
+import com.example.architecture.data.model.UserGetResponse
 import com.example.architecture.ui.adapter.SearchAdapter
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
@@ -31,10 +28,17 @@ class SearchFragment : Fragment() {
 
     private var service: ServiceApi? = null
 
+    private val ARG_PARAM1 = "param1"
+    private val ARG_PARAM2 = "param2"
+
     private var searchArray: ArrayList<RepoSearchResponse.RepoItem> = arrayListOf()
+    private var repoDTO: ArrayList<RepoGetResponse> = arrayListOf()
+
     private lateinit var searchAdapter: SearchAdapter
 
     private lateinit var searchQuery: String
+    private lateinit var owner : String
+    private lateinit var name : String
 
     private lateinit var recyclerView : RecyclerView
     private lateinit var loadingLayout : ConstraintLayout
@@ -43,6 +47,14 @@ class SearchFragment : Fragment() {
     private lateinit var et_search : EditText
     private lateinit var tv_totalCount : TextView
 
+    fun newInstance(param1: String?, param2: String?): DetailFragment? {
+        val fragment = DetailFragment()
+        val args = Bundle()
+        args.putString(ARG_PARAM1, param1)
+        args.putString(ARG_PARAM2, param2)
+        fragment.arguments = args
+        return fragment
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,11 +90,23 @@ class SearchFragment : Fragment() {
 
     private fun initAdapter(){
 
-        searchAdapter = SearchAdapter(activity!!,searchArray)
+        searchAdapter = SearchAdapter(activity!!, searchArray)
         val lm = LinearLayoutManager(activity!!)
         recyclerView.layoutManager = lm
         recyclerView.adapter = searchAdapter
 
+        searchAdapter.setItemClickListener(object : SearchAdapter.ItemClickListener {
+            override fun onClick(view: View, position: Int) {
+                owner = searchArray[position].owner.login
+                name = searchArray[position].name
+                (activity as MainActivity?)!!.replaceFragment(DetailFragment(),owner,name)
+            }
+        })
+
+    }
+
+    fun newInstance(): SearchFragment? {
+        return SearchFragment()
     }
 
     // 검색 유효성 검사
@@ -107,21 +131,29 @@ class SearchFragment : Fragment() {
 
     private fun getSearch(query: String){
         showProgress(true)
-        service?.searchRepo(query)?.enqueue(object: Callback<RepoSearchResponse?> {
+        service?.searchRepo(query)?.enqueue(object : Callback<RepoSearchResponse?> {
             @SuppressLint("SetTextI18n")
             override fun onResponse(
                 call: Call<RepoSearchResponse?>,
                 response: Response<RepoSearchResponse?>
-            ){
-                if(response.isSuccessful){
+            ) {
+                if (response.isSuccessful) {
                     showProgress(false)
                     val result = response.body()!!
-                    tv_totalCount.text = result.total_count.toString()+"개의 검색 결과가 있습니다."
+                    tv_totalCount.text = result.total_count.toString() + "개의 검색 결과가 있습니다."
 
                     searchArray.clear()
-                    Log.e("size",result.items.size.toString())
-                    for (i in 0 until result.items.size){
-                        searchArray.add(RepoSearchResponse.RepoItem(result.items[i].archive_url,result.items[i].full_name,result.items[i].private,result.items[i].owner))
+                    Log.e("size", result.items.size.toString())
+                    for (i in 0 until result.items.size) {
+                        searchArray.add(
+                            RepoSearchResponse.RepoItem(
+                                result.items[i].archive_url,
+                                result.items[i].full_name,
+                                result.items[i].name,
+                                result.items[i].private,
+                                result.items[i].owner
+                            )
+                        )
                     }
 
                     searchAdapter.notifyDataSetChanged()
@@ -129,7 +161,8 @@ class SearchFragment : Fragment() {
                     showProgress(false)
                 }
             }
-            override fun onFailure(call: Call<RepoSearchResponse?>?, t: Throwable){
+
+            override fun onFailure(call: Call<RepoSearchResponse?>?, t: Throwable) {
                 //통신에러
                 showProgress(false)
             }

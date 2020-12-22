@@ -7,6 +7,7 @@ data class RepoSearchResponse(
     data class RepoItem(
         val archive_url: String,
         val full_name: String,
+        val name: String,
         val private: Boolean,
         val owner: Owner
     ) {

@@ -1,5 +1,6 @@
 package com.example.howareyou.network
 
+import com.example.architecture.data.model.RepoGetResponse
 import com.example.architecture.data.model.RepoSearchResponse
 import com.example.architecture.data.model.UserGetResponse
 import okhttp3.MultipartBody
@@ -13,8 +14,8 @@ interface ServiceApi {
     @GET("search/repositories")
     fun searchRepo(@Query("q") query: String): Call<RepoSearchResponse>
 
-//    @GET("repos/{owner}/{name}")
-//    fun getRepo(@Path("owner") owner: String, @Path("name") name: String): Call<RepoGetModel>
+    @GET("repos/{owner}/{name}")
+    fun getRepo(@Path("owner") owner: String, @Path("name") name: String): Call<RepoGetResponse>
 
     @GET("users/{name}")
     fun getUser(@Path("name") name: String): Call<UserGetResponse>
