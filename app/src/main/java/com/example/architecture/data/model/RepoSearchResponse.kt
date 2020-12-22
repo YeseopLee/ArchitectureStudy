@@ -1,18 +1,19 @@
 package com.example.architecture.data.model
 
 data class RepoSearchResponse(
-    val total_count: Int,
+    var total_count: Int,
     val items: List<RepoItem>
 ) {
     data class RepoItem(
-        val archive_url: String,
-        val full_name: String,
-        val name: String,
-        val private: Boolean,
+        var archive_url: String,
+        var full_name: String,
+        var name: String,
+        var private: Boolean,
         val owner: Owner
+
     ) {
         data class Owner(
-            val login: String,
+            var login: String,
             val avatar_url: String
         )
     }

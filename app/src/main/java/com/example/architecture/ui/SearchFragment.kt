@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ import com.example.architecture.R
 import com.example.architecture.data.model.RepoGetResponse
 import com.example.architecture.data.model.RepoSearchResponse
 import com.example.architecture.data.model.UserGetResponse
+import com.example.architecture.databinding.FragmentSearchBinding
 import com.example.architecture.ui.adapter.SearchAdapter
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
@@ -33,6 +35,8 @@ class SearchFragment : Fragment() {
 
     private var searchArray: ArrayList<RepoSearchResponse.RepoItem> = arrayListOf()
     private var repoDTO: ArrayList<RepoGetResponse> = arrayListOf()
+
+    private lateinit var binding: FragmentSearchBinding
 
     private lateinit var searchAdapter: SearchAdapter
 
@@ -56,12 +60,14 @@ class SearchFragment : Fragment() {
         return fragment
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_search,container, false)
+        return binding.root
 
     }
 
@@ -70,10 +76,10 @@ class SearchFragment : Fragment() {
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
-        recyclerView = view.findViewById(R.id.search_recyclerview)
-        loadingLayout = view.findViewById(R.id.search_layout_loading)
         btn_search = view.findViewById(R.id.search_button_search)
+        recyclerView = view.findViewById(R.id.search_recyclerview)
         et_search = view.findViewById(R.id.search_edittext_search)
+        loadingLayout = view.findViewById(R.id.search_layout_loading)
         tv_totalCount = view.findViewById(R.id.search_textview_totalCount)
 
         initListner()
@@ -140,10 +146,10 @@ class SearchFragment : Fragment() {
                 if (response.isSuccessful) {
                     showProgress(false)
                     val result = response.body()!!
-                    tv_totalCount.text = result.total_count.toString() + "개의 검색 결과가 있습니다."
+                    binding.search = result
+                    tv_totalCount.visibility = View.VISIBLE
 
                     searchArray.clear()
-                    Log.e("size", result.items.size.toString())
                     for (i in 0 until result.items.size) {
                         searchArray.add(
                             RepoSearchResponse.RepoItem(
