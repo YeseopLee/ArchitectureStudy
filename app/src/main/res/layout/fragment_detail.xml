@@ -4,13 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="user"
-            type="com.example.architecture.data.model.UserGetResponse" />
 
-        <variable
-            name="repo"
-            type="com.example.architecture.data.model.RepoGetResponse" />
+        <import type="android.view.View"/>
 
         <variable
             name="viewModel"
@@ -40,13 +35,13 @@
                     android:layout_height="80dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:imgRes="@{user.avatar_url}" />
+                    app:imgRes="@{viewModel.userDTO.avatar_url}" />
 
                 <TextView
                     android:id="@+id/detail_textview_fullname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{repo.full_name}"
+                    android:text="@{viewModel.repoDTO.full_name}"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/detail_imageview_profile"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +52,7 @@
                     android:id="@+id/detail_textview_owner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{user.login}"
+                    android:text="@{viewModel.userDTO.login}"
                     app:layout_constraintEnd_toEndOf="@+id/detail_imageview_profile"
                     app:layout_constraintStart_toStartOf="@+id/detail_imageview_profile"
                     app:layout_constraintTop_toBottomOf="@+id/detail_imageview_profile" />
@@ -67,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
-                    android:text="@{Integer.toString(user.following)}"
+                    android:text="@{Integer.toString(viewModel.userDTO.following)}"
                     app:layout_constraintEnd_toEndOf="@+id/detail_textview_follower"
                     app:layout_constraintStart_toStartOf="@+id/detail_textview_follower"
                     app:layout_constraintTop_toBottomOf="@+id/detail_textview_follower" />
@@ -77,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
-                    android:text="@{Integer.toString(user.followers)}"
+                    android:text="@{Integer.toString(viewModel.userDTO.followers)}"
                     app:layout_constraintEnd_toEndOf="@+id/detail_textview_owner"
                     app:layout_constraintStart_toStartOf="@+id/detail_textview_owner"
                     app:layout_constraintTop_toBottomOf="@+id/detail_textview_owner" />
@@ -86,7 +81,7 @@
                     android:id="@+id/detail_textview_star"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{Integer.toString(repo.stargazers_count)}"
+                    android:text="@{Integer.toString(viewModel.repoDTO.stargazers_count)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/detail_textview_following" />
 
@@ -95,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="@{repo.language}"
+                    android:text="@{viewModel.repoDTO.language}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/detail_imageview_profile" />
 
@@ -104,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="@{Integer.toString(repo.forks_count)}"
+                    android:text="@{Integer.toString(viewModel.repoDTO.forks_count)}"
                     app:layout_constraintEnd_toStartOf="@+id/detail_textview_star"
                     app:layout_constraintTop_toTopOf="@+id/detail_textview_star" />
 
@@ -113,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="@{Integer.toString(repo.watchers_count)}"
+                    android:text="@{Integer.toString(viewModel.repoDTO.watchers_count)}"
                     app:layout_constraintEnd_toStartOf="@+id/detail_textview_fork"
                     app:layout_constraintTop_toTopOf="@+id/detail_textview_star" />
 
@@ -148,7 +143,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/detail_layout_loading"
-                android:visibility="gone"
+                android:visibility="@{viewModel.loading? View.VISIBLE:View.GONE}"
                 android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

@@ -27,21 +27,9 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         vm = ViewModelProvider(this).get(MainViewModel::class.java)
         binding.viewModel = vm
-//
-//        replaceFragment(SearchFragment(),null,null)
 
     }
 
-    fun replaceFragment(fragment: Fragment?, owner: String?, name: String?) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_framelayout, fragment!!.apply {
-                arguments = Bundle().apply {
-                    putString("owner",owner)
-                    putString("name",name)
-                }
-            })
-            .commit()
-    }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         val focusView = currentFocus

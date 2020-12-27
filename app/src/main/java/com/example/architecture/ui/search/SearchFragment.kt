@@ -15,7 +15,7 @@ import com.example.architecture.ui.adapter.SearchAdapter
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
-    private lateinit var viewModel : SearchViewModel
+    private lateinit var vm : SearchViewModel
     private lateinit var searchAdapter : SearchAdapter
 
     override fun onCreateView(
@@ -26,8 +26,8 @@ class SearchFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_search,container, false)
         binding.lifecycleOwner = this
-        viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-        binding.viewModel = viewModel
+        vm = ViewModelProvider(this).get(SearchViewModel::class.java)
+        binding.viewModel = vm
 
         return binding.root
 
@@ -39,7 +39,7 @@ class SearchFragment : Fragment() {
         initAdapter()
     }
 
-    fun initAdapter(){
+    private fun initAdapter(){
         searchAdapter = SearchAdapter()
         binding.searchRecyclerview.adapter = searchAdapter
     }
