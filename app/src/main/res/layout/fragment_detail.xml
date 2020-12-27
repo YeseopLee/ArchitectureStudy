@@ -11,6 +11,10 @@
         <variable
             name="repo"
             type="com.example.architecture.data.model.RepoGetResponse" />
+
+        <variable
+            name="viewModel"
+            type="com.example.architecture.ui.detail.DetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

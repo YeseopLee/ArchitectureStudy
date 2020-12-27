@@ -18,7 +18,9 @@ import com.example.architecture.ui.model.SearchData
 import com.example.architecture.util.Utils
 
 
-class SearchAdapter(val context: Context, val searchArray: ArrayList<RepoSearchResponse.RepoItem>) : RecyclerView.Adapter<SearchAdapter.CustomViewHolder>(){
+class SearchAdapter : RecyclerView.Adapter<SearchAdapter.CustomViewHolder>(){
+
+    var searchArray = ArrayList<RepoSearchResponse.RepoItem>()
 
     //클릭 인터페이스 정의
     interface ItemClickListener {
@@ -33,9 +35,15 @@ class SearchAdapter(val context: Context, val searchArray: ArrayList<RepoSearchR
         this.itemClickListner = itemClickListener
     }
 
+    fun setItem(data: ArrayList<RepoSearchResponse.RepoItem>){
+        this.searchArray.clear()
+        this.searchArray.addAll(data)
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
 
-        val binding = ItemSearchBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding = ItemSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CustomViewHolder(binding)
     }
 

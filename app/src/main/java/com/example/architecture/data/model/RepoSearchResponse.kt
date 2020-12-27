@@ -2,7 +2,7 @@ package com.example.architecture.data.model
 
 data class RepoSearchResponse(
     var total_count: Int,
-    val items: List<RepoItem>
+    val items: ArrayList<RepoItem>
 ) {
     data class RepoItem(
         var archive_url: String,

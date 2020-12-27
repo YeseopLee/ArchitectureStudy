@@ -5,9 +5,12 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
+
         <variable
-            name="search"
-            type="com.example.architecture.data.model.RepoSearchResponse" />
+            name="viewModel"
+            type="com.example.architecture.ui.search.SearchViewModel" />
 
     </data>
 
@@ -22,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:ems="20"
+            android:text="@={viewModel.query}"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toStartOf="@+id/search_button_search"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="search"
+            android:onClick="@{() -> viewModel.getSearch(viewModel.query)}"
             android:layout_marginRight="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -43,8 +48,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:visibility="invisible"
-            android:text="@{Integer.toString(search.total_count)}"
+            android:text="@{Integer.toString(viewModel.totalCount)}"
+            android:visibility="@{viewModel.loading? View.GONE:View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_edittext_search" />
@@ -61,12 +66,15 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/search_recyclerview"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                app:itemClickListener="@{viewModel}"
+                app:searchData="@{viewModel.searchArray}"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/search_layout_loading"
-                android:visibility="gone"
+                android:visibility="@{viewModel.loading? View.VISIBLE:View.GONE}"
                 android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
