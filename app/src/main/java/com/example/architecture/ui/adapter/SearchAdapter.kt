@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.architecture.data.model.RepoSearchResponse
 import com.example.architecture.databinding.ItemSearchBinding
 
-
-class SearchAdapter : RecyclerView.Adapter<SearchAdapter.CustomViewHolder>(){
+class SearchAdapter : RecyclerView.Adapter<CustomViewHolder>(){
 
     var searchArray = ArrayList<RepoSearchResponse.RepoItem>()
 
@@ -37,12 +36,6 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.CustomViewHolder>(){
         return CustomViewHolder(binding)
     }
 
-    class CustomViewHolder(val binding : ItemSearchBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun onBind(data : RepoSearchResponse.RepoItem){
-            binding.searchitem = data
-        }
-    }
-
     override fun getItemCount(): Int {
         return searchArray.size
     }
@@ -59,4 +52,10 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.CustomViewHolder>(){
     }
 
 
+}
+
+class CustomViewHolder(val binding : ItemSearchBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun onBind(data : RepoSearchResponse.RepoItem){
+        binding.searchitem = data
+    }
 }

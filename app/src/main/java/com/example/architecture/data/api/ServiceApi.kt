@@ -12,11 +12,11 @@ import retrofit2.http.*
 interface ServiceApi {
 
     @GET("search/repositories")
-    fun searchRepo(@Query("q") query: String): Call<RepoSearchResponse>
+    suspend fun searchRepo(@Query("q") query: String): RepoSearchResponse
 
     @GET("repos/{owner}/{name}")
-    fun getRepo(@Path("owner") owner: String, @Path("name") name: String): Call<RepoGetResponse>
+    suspend fun getRepo(@Path("owner") owner: String, @Path("name") name: String): RepoGetResponse
 
     @GET("users/{name}")
-    fun getUser(@Path("name") name: String): Call<UserGetResponse>
+    suspend fun getUser(@Path("name") name: String): UserGetResponse
 }

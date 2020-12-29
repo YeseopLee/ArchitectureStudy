@@ -26,6 +26,7 @@ object BindingAdapter {
         Glide.with(v.context).load(imageUrl).into(v)
     }
 
+    // recyclerview 데이터 검색
     @BindingAdapter("searchData")
     @JvmStatic
     fun bindRecyclerView(recyclerView: RecyclerView, data: ArrayList<RepoSearchResponse.RepoItem>?) {
@@ -35,6 +36,7 @@ object BindingAdapter {
         }
     }
 
+    // recyclerview 아이템 클릭 리스너
     @BindingAdapter("itemClickListener")
     @JvmStatic
     fun clickRecyclerView(recyclerView: RecyclerView, viewModel : SearchViewModel){
