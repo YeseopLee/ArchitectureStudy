@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +31,7 @@ class DetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         owner = arguments?.getString("owner")!!
         name = arguments?.getString("name")!!
+
     }
 
     override fun onCreateView(

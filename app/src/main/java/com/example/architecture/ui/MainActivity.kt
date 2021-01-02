@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.architecture.MyApplication
 import com.example.architecture.R
 import com.example.architecture.databinding.ActivityMainBinding
 import com.example.architecture.ui.search.SearchFragment
@@ -18,16 +19,22 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var vm : MainViewModel
+    private lateinit var myApplication: MyApplication
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
 
+        inject()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
         vm = ViewModelProvider(this).get(MainViewModel::class.java)
         binding.viewModel = vm
 
+    }
+
+    private fun inject(){
+        myApplication = application as MyApplication
     }
 
 
