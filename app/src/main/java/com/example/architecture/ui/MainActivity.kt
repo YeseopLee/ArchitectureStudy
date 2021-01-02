@@ -7,12 +7,10 @@ import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.architecture.MyApplication
 import com.example.architecture.R
 import com.example.architecture.databinding.ActivityMainBinding
-import com.example.architecture.ui.search.SearchFragment
 
 
 class MainActivity : AppCompatActivity() {

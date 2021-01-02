@@ -1,7 +1,6 @@
 package com.example.architecture.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,7 @@ class SearchFragment : Fragment() {
     private lateinit var searchAdapter: SearchAdapter
     private lateinit var myApplication: MyApplication
 
-    private val tViewModel: SearchViewModel by viewModels {
+    private val searchViewModel: SearchViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 return SearchViewModel(myApplication.searchRepository) as T
@@ -41,7 +40,7 @@ class SearchFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         binding.lifecycleOwner = this
-        binding.viewModel = tViewModel
+        binding.viewModel = searchViewModel
 
         return binding.root
 
