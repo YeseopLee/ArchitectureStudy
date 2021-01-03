@@ -23,7 +23,7 @@ class SearchFragment : Fragment() {
     private val searchViewModel: SearchViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return SearchViewModel(myApplication.searchRepository) as T
+                return SearchViewModel(myApplication.mainRepository, myApplication.searchRepository) as T
             }
         }
     }

@@ -5,10 +5,8 @@ data class RepoSearchResponse(
     val items: ArrayList<RepoItem>
 ) {
     data class RepoItem(
-        var archive_url: String,
         var full_name: String,
         var name: String,
-        var private: Boolean,
         val owner: Owner
 
     ) {

@@ -11,6 +11,9 @@ import retrofit2.http.*
 
 interface ServiceApi {
 
+    @GET("search/repositories?q=kotlin")
+    suspend fun mainRepo(): RepoSearchResponse
+
     @GET("search/repositories")
     suspend fun searchRepo(@Query("q") query: String): RepoSearchResponse
 
