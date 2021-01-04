@@ -12,13 +12,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.architecture.MyApplication
 import com.example.architecture.R
 import com.example.architecture.databinding.FragmentSearchBinding
+import com.example.architecture.ui.BaseFragment
 import com.example.architecture.ui.adapter.SearchAdapter
 
-class SearchFragment : Fragment() {
+class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
 
-    private lateinit var binding: FragmentSearchBinding
     private lateinit var searchAdapter: SearchAdapter
-    private lateinit var myApplication: MyApplication
 
     private val searchViewModel: SearchViewModel by viewModels {
         object : ViewModelProvider.Factory {
@@ -28,27 +27,9 @@ class SearchFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        myApplication = requireActivity().application as MyApplication
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
-        binding.lifecycleOwner = this
-        binding.viewModel = searchViewModel
-
-        return binding.root
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.viewModel = searchViewModel
         initAdapter()
     }
 

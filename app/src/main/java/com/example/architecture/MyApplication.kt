@@ -37,12 +37,13 @@ class MyApplication : Application() {
 
     private fun inject() {
         service =  RetrofitClient.client!!.create(ServiceApi::class.java)
-        mainDao = MainDatabase.getInstance(this).mainDao()
+        //mainDao = MainDatabase.getInstance(this).mainDao()
         searchRemoteDataSource = SearchRemoteDataSourceImpl(service)
         mainRemoteDataSource = MainRemoteDataSourceImpl(service)
-        mainLocalDataSource = MainLocalDataSourceImpl(mainDao)
+        //mainLocalDataSource = MainLocalDataSourceImpl(mainDao)
         searchRepository = SearchRepositoryImpl(searchRemoteDataSource)
-        mainRepository = MainRepositoryImpl(mainLocalDataSource,mainRemoteDataSource)
+        //mainRepository = MainRepositoryImpl(mainLocalDataSource,mainRemoteDataSource)
+        mainRepository = MainRepositoryImpl(mainRemoteDataSource)
     }
 
 }

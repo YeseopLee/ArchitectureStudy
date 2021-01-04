@@ -29,7 +29,7 @@ class SearchViewModel(
         loading.value = true
 
         viewModelScope.launch {
-            val mainRepoInfo = mainRepository.
+            val mainRepoInfo = mainRepository.initMain()
             repoArray.value = mainRepoInfo.items
             totalCount.value = mainRepoInfo.total_count
         }

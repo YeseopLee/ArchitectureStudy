@@ -4,5 +4,5 @@ import com.example.architecture.data.model.RepoSearchResponse
 import com.example.architecture.repository.local.Main
 
 interface MainRepository {
-    suspend fun initMain()
+    suspend fun initMain() : RepoSearchResponse
 }

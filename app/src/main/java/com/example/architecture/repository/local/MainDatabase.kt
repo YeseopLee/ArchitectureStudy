@@ -9,22 +9,22 @@ import androidx.room.RoomDatabase
 abstract class MainDatabase : RoomDatabase() {
     abstract fun mainDao(): MainDao
 
-    companion object {
-
-        private var INSTANCE: MainDatabase? = null
-
-        fun getInstance(context: Context): MainDatabase {
-            synchronized(this) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        MainDatabase::class.java, "Main.db"
-                    )
-                        .allowMainThreadQueries()
-                        .build()
-                }
-                return INSTANCE!!
-            }
-        }
-    }
+//    companion object {
+//
+//        private var INSTANCE: MainDatabase? = null
+//
+//        fun getInstance(context: Context): MainDatabase {
+//            synchronized(this) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = Room.databaseBuilder(
+//                        context.applicationContext,
+//                        MainDatabase::class.java, "Main.db"
+//                    )
+//                        .allowMainThreadQueries()
+//                        .build()
+//                }
+//                return INSTANCE!!
+//            }
+//        }
+//    }
 }

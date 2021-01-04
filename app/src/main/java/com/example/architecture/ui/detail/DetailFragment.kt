@@ -10,11 +10,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.architecture.R
 import com.example.architecture.databinding.FragmentDetailBinding
+import com.example.architecture.ui.BaseFragment
 
-class DetailFragment : Fragment() {
+class DetailFragment : BaseFragment<FragmentDetailBinding>(R.layout.fragment_detail) {
 
-
-    private lateinit var binding: FragmentDetailBinding
     private lateinit var detailViewModel: DetailViewModel
 
     lateinit var owner: String
@@ -27,19 +26,10 @@ class DetailFragment : Fragment() {
 
     }
 
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
-        binding.lifecycleOwner = this
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         detailViewModel = ViewModelProvider(this, viewModelFactory { DetailViewModel(owner, name) }).get(DetailViewModel::class.java)
         binding.viewModel = detailViewModel
-        return binding.root
-
-
     }
 
     protected inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
