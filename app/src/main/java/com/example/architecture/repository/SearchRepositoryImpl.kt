@@ -3,8 +3,11 @@ package com.example.architecture.repository
 import com.example.architecture.data.model.RepoSearchResponse
 import com.example.architecture.repository.remote.SearchRemoteDataSource
 import com.example.howareyou.network.ServiceApi
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SearchRepositoryImpl (
+class SearchRepositoryImpl @Inject constructor (
     private val searchRemoteDataSource: SearchRemoteDataSource
 ) : SearchRepository {
 

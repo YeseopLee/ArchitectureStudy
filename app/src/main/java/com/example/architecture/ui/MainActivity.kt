@@ -11,8 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.architecture.MyApplication
 import com.example.architecture.R
 import com.example.architecture.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private lateinit var vm : MainViewModel

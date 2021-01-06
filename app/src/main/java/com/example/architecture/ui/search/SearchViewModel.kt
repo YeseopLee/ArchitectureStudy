@@ -1,16 +1,15 @@
 package com.example.architecture.ui.search
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.architecture.data.model.RepoSearchResponse
-import com.example.architecture.repository.MainRepository
 import com.example.architecture.repository.SearchRepository
 import kotlinx.coroutines.launch
 
 
-class SearchViewModel(
-    private val mainRepository: MainRepository,
+class SearchViewModel @ViewModelInject constructor(
     private val searchRepository: SearchRepository
 ) : ViewModel() {
 
@@ -25,15 +24,6 @@ class SearchViewModel(
         loading.value = false
     }
 
-    fun initMain() {
-        loading.value = true
-
-        viewModelScope.launch {
-            val mainRepoInfo = mainRepository.initMain()
-            repoArray.value = mainRepoInfo.items
-            totalCount.value = mainRepoInfo.total_count
-        }
-    }
 
     fun getSearch(query: String) {
         //로딩 시작

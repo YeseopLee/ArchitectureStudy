@@ -1,17 +1,24 @@
 package com.example.architecture.ui.detail
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.architecture.data.model.RepoGetResponse
 import com.example.architecture.data.model.UserGetResponse
-import com.example.howareyou.network.RetrofitClient
+import com.example.architecture.di.module.DetailName
+import com.example.architecture.di.module.DetailOwner
 import com.example.howareyou.network.ServiceApi
 import kotlinx.coroutines.launch
 
-class DetailViewModel(owner: String, name: String) : ViewModel() {
-
-    private var service: ServiceApi = RetrofitClient.client!!.create(ServiceApi::class.java)
+//class DetailViewModel(owner: String, name: String) @ViewModelInject constructor() : ViewModel() {
+class DetailViewModel @ViewModelInject constructor(
+    private val service: ServiceApi,
+    @DetailOwner
+    private val owner: String,
+    @DetailName
+    private val name: String
+) : ViewModel() {
 
     var repoDTO = MutableLiveData<RepoGetResponse>()
     var userDTO = MutableLiveData<UserGetResponse>()

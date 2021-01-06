@@ -11,6 +11,10 @@ import retrofit2.http.*
 
 interface ServiceApi {
 
+    companion object {
+        const val BASE_URL = "https://api.github.com/"
+    }
+
     @GET("search/repositories?q=kotlin")
     suspend fun mainRepo(): RepoSearchResponse
 

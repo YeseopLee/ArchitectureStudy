@@ -14,18 +14,22 @@ import com.example.architecture.R
 import com.example.architecture.databinding.FragmentSearchBinding
 import com.example.architecture.ui.BaseFragment
 import com.example.architecture.ui.adapter.SearchAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
 
     private lateinit var searchAdapter: SearchAdapter
 
-    private val searchViewModel: SearchViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return SearchViewModel(myApplication.mainRepository, myApplication.searchRepository) as T
-            }
-        }
-    }
+    private val searchViewModel by viewModels<SearchViewModel>()
+
+//    private val searchViewModel: SearchViewModel by viewModels {
+//        object : ViewModelProvider.Factory {
+//            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//                return SearchViewModel(myApplication.searchRepository) as T
+//            }
+//        }
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
