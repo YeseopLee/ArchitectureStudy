@@ -10,20 +10,20 @@ import javax.inject.Qualifier
 @InstallIn(ApplicationComponent::class)
 object DetailModule {
 
-    @DetailName
-    @Provides
-    fun provideName() = "Android"
-
-    @DetailOwner
-    @Provides
-    fun provideOwner() = "open-android"
+//    @DetailName
+//    @Provides
+//    fun provideName() = "Android"
+//
+//    @DetailOwner
+//    @Provides
+//    fun provideOwner() = "open-android"
 
 }
 
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class DetailOwner
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class DetailName
+//@Qualifier
+//@Retention(AnnotationRetention.RUNTIME)
+//annotation class DetailOwner
+//
+//@Qualifier
+//@Retention(AnnotationRetention.RUNTIME)
+//annotation class DetailName

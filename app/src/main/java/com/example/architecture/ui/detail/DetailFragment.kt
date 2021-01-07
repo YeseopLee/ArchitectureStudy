@@ -19,17 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class DetailFragment : BaseFragment<FragmentDetailBinding>(R.layout.fragment_detail) {
 
     private val detailViewModel by viewModels<DetailViewModel>()
-
-    lateinit var owner: String
-    lateinit var name: String
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        owner = arguments?.getString("owner")!!
-        name = arguments?.getString("name")!!
-
-    }
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //detailViewModel = ViewModelProvider(this, viewModelFactory { DetailViewModel(owner, name) }).get(DetailViewModel::class.java)

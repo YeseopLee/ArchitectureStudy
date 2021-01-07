@@ -4,20 +4,15 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.architecture.MyApplication
 import com.example.architecture.data.model.RepoGetResponse
 import com.example.architecture.data.model.UserGetResponse
-import com.example.architecture.di.module.DetailName
-import com.example.architecture.di.module.DetailOwner
 import com.example.howareyou.network.ServiceApi
 import kotlinx.coroutines.launch
 
 //class DetailViewModel(owner: String, name: String) @ViewModelInject constructor() : ViewModel() {
 class DetailViewModel @ViewModelInject constructor(
-    private val service: ServiceApi,
-    @DetailOwner
-    private val owner: String,
-    @DetailName
-    private val name: String
+    private val service: ServiceApi
 ) : ViewModel() {
 
     var repoDTO = MutableLiveData<RepoGetResponse>()
@@ -27,11 +22,14 @@ class DetailViewModel @ViewModelInject constructor(
     init {
         loading.value = false
 
+        val owner = MyApplication.prefs.selectedOwner
+        val name = MyApplication.prefs.selectedName
+
         getRepo(owner, name)
         getUser(owner)
     }
 
-    fun getRepo(owner: String, name: String) {
+    private fun getRepo(owner: String, name: String) {
         loading.value = true
 
         viewModelScope.launch {
@@ -41,7 +39,7 @@ class DetailViewModel @ViewModelInject constructor(
         }
     }
 
-    fun getUser(owner: String) {
+    private fun getUser(owner: String) {
         loading.value = true
 
         viewModelScope.launch {

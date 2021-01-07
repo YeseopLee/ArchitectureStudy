@@ -1,12 +1,9 @@
 package com.example.architecture.ui
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 
-class MainViewModel : ViewModel() {
-
-    init {
-
-     }
+class MainViewModel @ViewModelInject constructor() : ViewModel() {
 
 }
 
